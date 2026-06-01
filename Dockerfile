@@ -10,7 +10,7 @@ RUN useradd -m appuser
 
 WORKDIR /home/appuser
 
-ENV JAVA_TOOL_OPTIONS="-Duser.timezone=Europe/Berlin"
+ENV JAVA_TOOL_OPTIONS="-Duser.timezone=Asia/Ho_Chi_Minh"
 
 EXPOSE 8080
 

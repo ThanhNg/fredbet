@@ -18,7 +18,7 @@ RUN apt-get update && apt-get upgrade -y \
 
 WORKDIR /
 
-ENV JAVA_TOOL_OPTIONS="-Duser.timezone=Europe/Berlin"
+ENV JAVA_TOOL_OPTIONS="-Duser.timezone=Asia/Ho_Chi_Minh -Duser.language=en -Duser.country=US"
 
 EXPOSE 8080
 
@@ -27,5 +27,5 @@ COPY --from=builder /build/target/fredbet.jar fredbet.jar
 RUN useradd -m appuser
 USER appuser
 
-ENTRYPOINT ["java", "-jar", "fredbet.jar"]
+ENTRYPOINT ["java", "-Duser.language=en -Duser.country=US", "-jar", "fredbet.jar"]
 CMD ["exec"]

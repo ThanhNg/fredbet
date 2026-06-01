@@ -15,14 +15,8 @@ public class LanguageIconUtil {
         if ("en".equals(language)) {
             return cssClassFor("gb");
         }
-        if ("cs".equals(language)) {
-            return cssClassFor("cz");
-        }
-        if ("ca".equals(language)) {
-            return cssClassFor("es-ct");
-        }
-        if ("sv".equals(language)) {
-            return cssClassFor("se");
+        if ("vi".equals(language)) {
+            return cssClassFor("vn");
         }
         return cssClassFor(language);
     }

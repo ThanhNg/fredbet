@@ -61,9 +61,9 @@ logging:
 # -------- fredbet properties ------------------------------------------------------------------------------
 
 fredbet:
-  default-language: de
+  default-language: vi
   dice-min-range: 0
-  dice-max-range: 3
+  dice-max-range: 4
   thumbnail-size: 100
   admin-username: "admin"
   admin-password: "admin"

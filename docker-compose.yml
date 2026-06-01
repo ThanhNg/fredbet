@@ -1,7 +1,7 @@
 services:
   postgres:
     container_name: postgres
-    image: postgres
+    image: postgres:15
     volumes:
       - postgres-only-vol:/var/lib/postgresql/data
     ports:
@@ -10,7 +10,7 @@ services:
       - POSTGRES_USER=fred
       - POSTGRES_PASSWORD=fred
       - POSTGRES_DB=fredbetdb
-      - TZ=Europe/Berlin
+      - TZ=Asia/Ho_Chi_Minh
   fredbet:
     profiles: ["app"] # run with 'docker compose --profile app build'
     container_name: fredbet
