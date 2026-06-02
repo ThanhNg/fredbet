@@ -4,13 +4,10 @@ WORKDIR /build
 COPY pom.xml .
 
 COPY src/ /build/src/
-COPY .git /build/.git/
 RUN mvn -B -DskipTests package
 
 # Step : Package image
 FROM eclipse-temurin:25-jre-jammy
-
-LABEL maintainer="Michael Staehler"
 
 RUN apt-get update && apt-get upgrade -y \
  && apt-get clean \
@@ -27,5 +24,5 @@ COPY --from=builder /build/target/fredbet.jar fredbet.jar
 RUN useradd -m appuser
 USER appuser
 
-ENTRYPOINT ["java", "-Duser.language=en -Duser.country=US", "-jar", "fredbet.jar"]
+ENTRYPOINT ["java", "-jar", "fredbet.jar"]
 CMD ["exec"]

@@ -34,6 +34,7 @@
 					</div>
 					<div class="mb-3">
 						<a href="#" th:href="@{'/user/' + ${editUserCommand.userId} + '/resetPwd'}" class="btn btn-warning" role="button" th:text="#{button.password.reset}"></a>
+                        <a href="#" th:href="@{'/user/' + ${editUserCommand.userId} + '/clearBets'}" class="btn btn-danger" role="button" th:text="#{button.bets.clear}"></a>
 					</div>
 					<div class="mb-3">
 						<button type="submit" class="btn btn-primary" th:text="#{button.save}"></button>

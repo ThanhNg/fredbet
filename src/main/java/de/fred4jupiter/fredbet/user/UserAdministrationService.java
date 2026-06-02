@@ -118,6 +118,13 @@ public class UserAdministrationService {
         renameUserProfileImageName(userToBeRenamed, newUsername);
     }
 
+    public String clearBetsForUser(Long userId) {
+        AppUser appUser = this.appUserRepository.findByUserId(userId);
+        this.betRepository.deleteAllBetsOfUser(appUser.getUsername());
+        this.extraBetRepository.deleteAllExtraBetsOfUser(appUser.getUsername());
+        return appUser.getUsername();
+    }
+
     private void renameUserProfileImageName(AppUser userToBeRenamed, String newUsername) {
         ImageGroup imageGroup = imageGroupRepository.findByUserProfileImageGroup();
 

@@ -193,4 +193,12 @@ public class UserController {
         webMessageUtil.addInfoMsg(redirect, "user.password.reset", username);
         return REDIRECT_USER_PAGE;
     }
+
+    @PreAuthorize("hasAuthority('" + FredBetPermission.PERM_EDIT_USER + "')")
+    @GetMapping("{id}/clearBets")
+    public String clearBets(@PathVariable("id") Long userId, RedirectAttributes redirect) {
+        String username = userAdministrationService.clearBetsForUser(userId);
+        webMessageUtil.addInfoMsg(redirect, "user.bets.cleared", username);
+        return REDIRECT_USER_PAGE;
+    }
 }
