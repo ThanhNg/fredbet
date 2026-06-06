@@ -82,13 +82,24 @@ public class MatchService {
         return dateTimeNow.isAfter(firstMatchKickOffDate);
     }
 
+    public boolean hasFirstMatchOfGroupStarted(Group group) {
+        LocalDateTime dateTimeNow = LocalDateTime.now();
+        LocalDateTime firstMatchKickOffDate = matchRepository.findStartDateOfFirstMatchOfGroup(group);
+        if (firstMatchKickOffDate == null) {
+            return false;
+        }
+        return dateTimeNow.isAfter(firstMatchKickOffDate);
+    }
+
     public boolean isBettable() {
         return !isNotBettable();
     }
 
     public boolean isNotBettable() {
         // if first match has started (based on kick off date) or there is no match with a result
-        return hasFirstMatchStarted() || hasMatchWithResult();
+        // return hasFirstMatchStarted() || hasMatchWithResult();
+
+        return hasFirstMatchOfGroupStarted(Group.ROUND_OF_THIRTY_TWO) || hasMatchOfGroupWithResult(Group.ROUND_OF_THIRTY_TWO);
     }
 
     public Optional<Match> findByExternalId(String externalId) {
@@ -213,5 +224,9 @@ public class MatchService {
 
     public boolean hasMatchWithResult() {
         return matchRepository.hasMatchWithResult();
+    }
+
+    public boolean hasMatchOfGroupWithResult(Group group) {
+        return matchRepository.hasMatchOfGroupWithResult(group);
     }
 }

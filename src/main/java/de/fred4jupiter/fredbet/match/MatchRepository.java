@@ -49,6 +49,9 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
     @Query("select min(a.kickOffDate) from Match a")
     LocalDateTime findStartDateOfFirstMatch();
 
+    @Query("select min(a.kickOffDate) from Match a where a.group = :group")
+    LocalDateTime findStartDateOfFirstMatchOfGroup(@Param("group") Group group);
+
     @Query("select a.group from Match a where a.group is not null")
     Set<Group> fetchGroupsOfAllMatches();
 
@@ -97,6 +100,15 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
         or (m.teamTwo is not null and m.goalsTeamTwo is not null)
         """)
     boolean hasMatchWithResult();
+
+    @Query("""
+        select case when (count(m) > 0) then true else false end
+        from Match m
+        where m.group = :group
+        and ((m.teamOne is not null and m.goalsTeamOne is not null)
+        or (m.teamTwo is not null and m.goalsTeamTwo is not null))
+        """)
+    boolean hasMatchOfGroupWithResult(@Param("group") Group group);
 
     @Query("""
         select m

@@ -38,9 +38,9 @@ public class RuntimeSettings {
      */
     private boolean changePasswordOnFirstLogin;
 
-    @NotNull
-    @Min(value = 0)
-    private Integer jokerMaxCount = 3;
+    // @NotNull
+    // @Min(value = 0)
+    // private Integer jokerMaxCount = 3;
 
     private Integer imageUploadLimit;
 
@@ -104,13 +104,13 @@ public class RuntimeSettings {
         this.changePasswordOnFirstLogin = changePasswordOnFirstLogin;
     }
 
-    public Integer getJokerMaxCount() {
-        return jokerMaxCount;
-    }
+    // public Integer getJokerMaxCount() {
+    //     return jokerMaxCount;
+    // }
 
-    public void setJokerMaxCount(Integer jokerMaxCount) {
-        this.jokerMaxCount = jokerMaxCount;
-    }
+    // public void setJokerMaxCount(Integer jokerMaxCount) {
+    //     this.jokerMaxCount = jokerMaxCount;
+    // }
 
     public boolean isSelfRegistrationEnabled() {
         return selfRegistrationEnabled;

@@ -2,8 +2,8 @@ package de.fred4jupiter.fredbet.betting;
 
 import de.fred4jupiter.fredbet.betting.repository.BetRepository;
 import de.fred4jupiter.fredbet.domain.Joker;
-import de.fred4jupiter.fredbet.settings.RuntimeSettings;
-import de.fred4jupiter.fredbet.settings.RuntimeSettingsService;
+import de.fred4jupiter.fredbet.points.PointsConfigService;
+import de.fred4jupiter.fredbet.points.PointsConfiguration;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,17 +11,17 @@ public class JokerService {
 
     private final BetRepository betRepository;
 
-    private final RuntimeSettingsService runtimeSettingsService;
+    private final PointsConfigService pointsConfigService;
 
-    public JokerService(BetRepository betRepository, RuntimeSettingsService runtimeSettingsService) {
+    public JokerService(BetRepository betRepository, PointsConfigService pointsConfigService) {
         this.betRepository = betRepository;
-        this.runtimeSettingsService = runtimeSettingsService;
+        this.pointsConfigService = pointsConfigService;
     }
 
     public Joker getJokerForUser(String userName) {
         Integer numberOfJokersUsed = betRepository.countNumberOfJokerUsed(userName);
-        RuntimeSettings runtimeSettings = runtimeSettingsService.loadRuntimeSettings();
-        return new Joker(numberOfJokersUsed, runtimeSettings.getJokerMaxCount());
+        PointsConfiguration pointsConfig = pointsConfigService.loadPointsConfig();
+        return new Joker(numberOfJokersUsed, pointsConfig.getJokerMaxCount());
     }
 
     public boolean isSettingJokerAllowed(String userName, Long matchId) {

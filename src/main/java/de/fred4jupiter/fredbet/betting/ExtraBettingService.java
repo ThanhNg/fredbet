@@ -37,6 +37,11 @@ public class ExtraBettingService {
     }
 
     public void saveExtraBet(Country finalWinner, Country semiFinalWinner, Country thirdFinalWinner, String username) {
+        // Check if betting is still allowed (no match of round of 32 started or has result)
+        if (matchService.isNotBettable()) {
+            throw new NoBettingAfterMatchStartedAllowedException("Betting for extra bet is not allowed anymore.");
+        }
+
         ExtraBet found = extraBetRepository.findByUserName(username);
         if (finalWinner == null && semiFinalWinner == null && found != null) {
             // reset/delete existing extra bet
