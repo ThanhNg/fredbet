@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDateTime;
 
 class BetRepositoryImpl implements BetRepositoryCustom {
 
@@ -39,6 +40,24 @@ class BetRepositoryImpl implements BetRepositoryCustom {
                 """;
         Map<String, Object> params = new HashMap<>();
         params.put("username", fredbetProperties.adminUsername());
+
+        return namedParameterJdbcOperations.query(sql, params, (ResultSet rs, int rowNum) -> new UsernamePoints(rs.getString(1), rs.getInt(2)));
+    }
+
+    @Override
+    public List<UsernamePoints> calculateRangingByDate(LocalDateTime from, LocalDateTime to) {
+        final String sql = """
+                Select b.user_name, sum(b.points) as sum_all
+                from bet b LEFT JOIN matches m on b.match_id = m.match_id
+                where b.user_name not like :username
+                  and m.kick_off_date >= :from
+                  and m.kick_off_date < :to
+                group by b.user_name order by sum_all desc
+                """;
+        Map<String, Object> params = new HashMap<>();
+        params.put("username", fredbetProperties.adminUsername());
+        params.put("from", from);
+        params.put("to", to);
 
         return namedParameterJdbcOperations.query(sql, params, (ResultSet rs, int rowNum) -> new UsernamePoints(rs.getString(1), rs.getInt(2)));
     }

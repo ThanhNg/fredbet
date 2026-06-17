@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @Controller
@@ -71,7 +75,20 @@ public class RankingController {
             rankings.get(i).setCssRankClass(getCssRankingClassForPosition(i));
         }
 
+        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+
+        ZonedDateTime lastMondayNoon = ZonedDateTime.now(zoneId).with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY)).with(LocalTime.NOON);
+        ZonedDateTime nextMondayNoon = lastMondayNoon.plusWeeks(1);
+
+        List<UsernamePoints> weekRankings = rankingService.calculateThisWeekRanking(rankingSelection, lastMondayNoon.toLocalDateTime(), nextMondayNoon.toLocalDateTime());
+        for (int i = 0; i < weekRankings.size(); i++) {
+            weekRankings.get(i).setCssRankClass(getCssRankingClassForPosition(i));
+        }
+
         model.addAttribute("rankings", rankings);
+        model.addAttribute("weekRankings", weekRankings);
+        model.addAttribute("weekStart", lastMondayNoon.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        model.addAttribute("weekEnd", nextMondayNoon.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
         model.addAttribute("rankingSelection", rankingSelection);
         return PAGE_RANKING;
     }

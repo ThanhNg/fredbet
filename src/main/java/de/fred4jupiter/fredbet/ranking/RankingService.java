@@ -16,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 
 @Service
 @Transactional
@@ -49,6 +52,16 @@ public class RankingService {
 
     public List<UsernamePoints> calculateCurrentRanking(RankingSelection rankingSelection) {
         final List<UsernamePoints> rankings = betRepository.calculateRanging();
+
+        calculateAdditionalMetricsForRanking(rankings);
+
+        sameRankingCollector.markEntriesWithSameRanking(rankings);
+
+        return filterAndSortRankings(rankingSelection, rankings);
+    }
+
+    public List<UsernamePoints> calculateThisWeekRanking(RankingSelection rankingSelection, LocalDateTime from, LocalDateTime to) {
+        final List<UsernamePoints> rankings = betRepository.calculateRangingByDate(from, to);
 
         calculateAdditionalMetricsForRanking(rankings);
 
