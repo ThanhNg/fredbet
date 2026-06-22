@@ -42,8 +42,16 @@
 
             <div class="row mt-3">
 				<div class="col-12">
-					<h1 th:text="#{ranking.this_week_list.title}"></h1>
+					<h1 th:text="#{ranking.week_list.title}"></h1>
                     <h6 th:text="(${weekStart} + ' - ' + ${weekEnd})"></h6>
+                    <form th:action="@{/ranking}" method="get">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="weekDate" class="form-label" th:text="#{ranking.week_list.select_week} + ':'"></label>
+                                <input type="date" id="weekDate" name="weekDate" th:value="${weekDate}" class="form-control form-control-sm" style="max-width: 12rem;" onchange="this.form.submit()" />
+                            </div>
+                        </div>
+                    </form>
 				</div>
 			</div>
 

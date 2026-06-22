@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{_layout}">
+<head>
+	<title th:text="#{ranking.list.title}"></title>
+    <link rel="stylesheet" th:href="@{/css/pages/matches_list.css}" />
+</head>
+<body>
+	<div layout:fragment="content">
+		<h1 th:text="${heading} + ' (' + ${#lists.size(userMatches)} + ')'"></h1>
+			<div class="row">
+				<div class="col-12 col-sm-8 col-md-6 col-lg-4" th:each="matchCommand : ${userMatches}">
+					<a class="anchor" th:id="${matchCommand.match.id}"></a>
+					<div class="card  mb-3">
+						<div class="card-header">
+							<div class="row">
+								<div class="col-12">
+                                    <div th:replace="~{fragments/match_head :: match_head_list(${matchCommand.match})}"></div>
+									<br/>
+									<span th:text="${#temporals.format(matchCommand.match.kickOffDate, 'EEE dd MMMM yyyy HH:mm')}"></span>
+									<span class="badge rounded-pill bg-warning big-badge right" th:if="${matchCommand.match.hasMatchFinished()}" th:text="${matchCommand.bet?.points}"></span>
+									<br/>
+                                    <span th:text="${matchCommand.match.getGroupLabel(@messageSourceUtil)}"></span>
+					  			</div>
+				  			</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-2">
+									<div class="mb-1">
+										<span class="fas fa-thumbs-up fa-2x" th:title="#{matches.list.betted}" data-toggle="tooltip" data-placement="top"></span>
+									</div>
+									<div class="mt-1">
+										<span class="fas fa-trophy fa-2x" th:title="#{matches.list.result}" data-toggle="tooltip" data-placement="bottom"></span>
+									</div>
+					  			</div>
+					  			<div class="col-4">
+					  				<div class="mb-2 mt-2">
+					  					<span class="badge rounded-pill bg-success big-badge" th:classappend="${matchCommand.getUserBetGoalsTeamOneCssClasses()}"
+					  					      th:text="${matchCommand.bet?.goalsTeamOne != null ? matchCommand.bet?.goalsTeamOne : '?'}"></span>
+								  		<span> : </span>
+							  			<span class="badge rounded-pill bg-success big-badge" th:classappend="${matchCommand.getUserBetGoalsTeamTwoCssClasses()}"
+							  			      th:text="${matchCommand.bet?.goalsTeamTwo != null ? matchCommand.bet?.goalsTeamTwo : '?'}"></span>
+					  				</div>
+					  				<div>
+					  					<span class="badge rounded-pill bg-info big-badge" th:classappend="${matchCommand.getTeamResultOneCssClasses()}"
+					  					      th:text="${matchCommand.match.goalsTeamOne != null ? matchCommand.match.goalsTeamOne : '?'}"></span>
+								  		<span> : </span>
+							  			<span class="badge rounded-pill bg-info big-badge" th:classappend="${matchCommand.getTeamResultTwoCssClasses()}"
+							  			      th:text="${matchCommand.match.goalsTeamTwo != null ? matchCommand.match.goalsTeamTwo : '?'}"></span>
+					  				</div>
+					  			</div>
+       						</div>
+					   </div>
+					</div>
+				</div>
+			</div>
+	</div>
+</body>
+</html>

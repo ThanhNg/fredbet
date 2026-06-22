@@ -45,6 +45,15 @@ public class MatchCommandMapper {
         return toMatchCommandsWithBets(currentUserName, matches);
     }
 
+    public List<MatchCommand> findUserMatches(String username, Function<MatchService, List<Match>> matchServiceCallback) {
+        return findUserMatches(username, (user, matchService) -> matchServiceCallback.apply(matchService));
+    }
+
+    public List<MatchCommand> findUserMatches(String username, BiFunction<String, MatchService, List<Match>> matchServiceCallback) {
+        List<Match> matches = matchServiceCallback.apply(username, this.matchService);
+        return toMatchCommandsWithBets(username, matches);
+    }
+
     private Map<Long, Bet> findBetsForMatchIds(String username) {
         List<Bet> allUserBets = bettingService.findAllByUsername(username);
         if (Validator.isEmpty(allUserBets)) {
