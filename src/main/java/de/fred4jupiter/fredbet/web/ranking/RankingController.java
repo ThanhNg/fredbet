@@ -29,6 +29,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/ranking")
@@ -106,11 +107,13 @@ public class RankingController {
         return ResponseEntityUtil.createResponseEntity(fileName, fileContent, CONTENT_TYPE_PDF);
     }
 
-    @GetMapping("/user/{username}")
-    public String listUserBets(Model model, @PathVariable("username") String username,
+    @GetMapping("/user")
+    public String listUserBets(Model model,
+        @RequestParam(required = true) String username,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate weekDate) {
 
-        List<MatchCommand> matches = matchCommandMapper.findUserMatches(username, MatchService::findAllPastMatches);
+        List<MatchCommand> allUserMatches = matchCommandMapper.findUserMatches(username, MatchService::findAllPastMatches);
+        List<MatchCommand> weekMatches = new ArrayList<>(allUserMatches);
 
         if (weekDate != null) {
             ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
@@ -120,13 +123,21 @@ public class RankingController {
             ZonedDateTime nextMondayNoon = lastMondayNoon.plusWeeks(1);
 
             // Filter user bets for the specified week using loop
-            matches.removeIf(matchCommand -> {
+            weekMatches.removeIf(matchCommand -> {
                 LocalDateTime kickOffDate = matchCommand.getMatch().getKickOffDate();
+                if (kickOffDate == null) {
+                    return true; // Remove matches with null kick-off date
+                }
                 return kickOffDate.isBefore(lastMondayNoon.toLocalDateTime()) || kickOffDate.isAfter(nextMondayNoon.toLocalDateTime());
             });
+
+            model.addAttribute("weekStart", lastMondayNoon.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            model.addAttribute("weekEnd", nextMondayNoon.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            model.addAttribute("weekDate", baseDate.toString());
         }
 
-        model.addAttribute("userMatches", matches);
+        model.addAttribute("userMatches", weekMatches);
+        model.addAttribute("username", username);
         return PAGE_RANKING_USER;
     }
 

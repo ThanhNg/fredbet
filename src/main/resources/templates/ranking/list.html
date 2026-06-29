@@ -32,7 +32,9 @@
                                           th:title="#{ranking.topTipperOfToday.tooltip}"></span>
                                 </div>
                                 <div class="col-2 ps-0 pe-0">
-                                    <span class="badge rounded-pill bg-warning rank-badge" th:text="${ranking.totalPoints}"></span>
+                                    <a th:href="@{/ranking/user(username=${ranking.userName})}">
+                                        <span class="badge rounded-pill bg-warning rank-badge" th:text="${ranking.totalPoints}"></span>
+                                    </a>
                                 </div>
                             </div>
 						</div>
@@ -75,7 +77,9 @@
                                           th:title="#{ranking.topTipperOfToday.tooltip}"></span>
                                 </div>
                                 <div class="col-2 ps-0 pe-0">
-                                    <span class="badge rounded-pill bg-warning rank-badge" th:text="${ranking.totalPoints}"></span>
+                                    <a th:href="@{/ranking/user(username=${ranking.userName}, weekDate=${weekDate})}">
+                                        <span class="badge rounded-pill bg-warning rank-badge" th:text="${ranking.totalPoints}"></span>
+                                    </a>
                                 </div>
                             </div>
 						</div>

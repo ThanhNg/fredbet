@@ -7,7 +7,8 @@
 </head>
 <body>
 	<div layout:fragment="content">
-		<h1 th:text="${heading} + ' (' + ${#lists.size(userMatches)} + ')'"></h1>
+		<h1 th:text="${username} + ' (' + ${#aggregates.sum(userMatches.![bet.points]) } + ')'"></h1>
+        <h6 th:if="${weekStart != null and weekEnd != null}" th:text="(${weekStart} + ' - ' + ${weekEnd})"></h6>
 			<div class="row">
 				<div class="col-12 col-sm-8 col-md-6 col-lg-4" th:each="matchCommand : ${userMatches}">
 					<a class="anchor" th:id="${matchCommand.match.id}"></a>
