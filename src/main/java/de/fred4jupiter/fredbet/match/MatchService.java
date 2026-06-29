@@ -82,13 +82,13 @@ public class MatchService {
         return dateTimeNow.isAfter(firstMatchKickOffDate);
     }
 
-    public boolean hasFirstMatchOfGroupStarted(Group group) {
+    public boolean hasFirstMatchOfGroupStarted(Group group, int deltaHours) {
         LocalDateTime dateTimeNow = LocalDateTime.now();
         LocalDateTime firstMatchKickOffDate = matchRepository.findStartDateOfFirstMatchOfGroup(group);
         if (firstMatchKickOffDate == null) {
             return false;
         }
-        return dateTimeNow.isAfter(firstMatchKickOffDate);
+        return dateTimeNow.isAfter(firstMatchKickOffDate.plusHours(deltaHours));
     }
 
     public boolean isBettable() {
@@ -99,7 +99,7 @@ public class MatchService {
         // if first match has started (based on kick off date) or there is no match with a result
         // return hasFirstMatchStarted() || hasMatchWithResult();
 
-        return hasFirstMatchOfGroupStarted(Group.ROUND_OF_THIRTY_TWO) || hasMatchOfGroupWithResult(Group.ROUND_OF_THIRTY_TWO);
+        return hasFirstMatchOfGroupStarted(Group.ROUND_OF_THIRTY_TWO, 22);
     }
 
     public Optional<Match> findByExternalId(String externalId) {
