@@ -81,11 +81,6 @@ import org.springframework.util.Assert;
 
     private boolean isCorrectWinner(Match match, Bet bet) {
         if (match.isKnockoutMatch() && match.isUndecidedResult()) {
-
-            if ((match.isPenaltyWinnerOne() && bet.isTeamOneWinner()) || (!match.isPenaltyWinnerOne() && bet.isTeamTwoWinner())) {
-                return true;
-            }
-
             return false;
         }
         return (match.isTeamOneWinner() && bet.isTeamOneWinner()) || (match.isTeamTwoWinner() && bet.isTeamTwoWinner());
